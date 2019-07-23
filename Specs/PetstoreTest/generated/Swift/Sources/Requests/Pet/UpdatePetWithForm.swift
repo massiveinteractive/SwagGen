@@ -7,12 +7,10 @@ import Foundation
 
 extension PetstoreTest.Pet {
 
-    /**
-    Updates a pet in the store with form data
-    */
+    /** Updates a pet in the store with form data */
     public enum UpdatePetWithForm {
 
-        public static let service = APIService<Response>(id: "updatePetWithForm", tag: "pet", method: "POST", path: "/pet/{petId}", hasBody: true, securityRequirement: SecurityRequirement(type: "petstore_auth", scope: "write:pets"))
+        public static let service = APIService<Response>(id: "updatePetWithForm", tag: "pet", method: "POST", path: "/pet/{petId}", hasBody: true, securityRequirement: SecurityRequirement(type: "petstore_auth", scopes: ["write:pets", "read:pets"]))
 
         public final class Request: APIRequest<Response> {
 
@@ -51,7 +49,7 @@ extension PetstoreTest.Pet {
                 return super.path.replacingOccurrences(of: "{" + "petId" + "}", with: "\(self.options.petId)")
             }
 
-            public override var parameters: [String: Any] {
+            public override var formParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 if let name = options.name {
                   params["name"] = name

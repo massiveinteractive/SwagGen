@@ -106,17 +106,17 @@ class GenerateCommand: Command {
             }
 
             spec = try SwaggerSpec(url: specURL)
-        } catch let error {
+        } catch {
             exitWithError("Error loading Swagger Spec: \(error)")
         }
 
         let specCounts = getCountString(
             counts: [
                 ("operation", spec.paths.reduce(0) { $0 + $1.operations.count }),
-                ("definition", spec.definitions.count),
+                ("definition", spec.components.schemas.count),
                 // ("tag", spec.tags.count),
-                ("parameter", spec.parameters.count),
-                ("security definition", spec.securityDefinitions.count),
+                ("parameter", spec.components.parameters.count),
+                ("security definition", spec.components.securitySchemes.count),
             ], pluralise: true
         )
         standardOut("Loaded spec: \"\(spec.info.title)\" - \(specCounts)")
@@ -129,7 +129,7 @@ class GenerateCommand: Command {
         let templateConfig: TemplateConfig
         do {
             templateConfig = try TemplateConfig(path: templatePath.normalize(), options: options)
-        } catch let error {
+        } catch {
             exitWithError("Error loading template: \(error)")
         }
 
@@ -199,7 +199,7 @@ class GenerateCommand: Command {
                 }
             }
             standardOut("Generation complete: \(generationResult)")
-        } catch let error {
+        } catch {
             exitWithError("Error generating code: \(error)")
         }
     }

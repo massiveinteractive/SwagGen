@@ -7,14 +7,9 @@ import Foundation
 
 public class Offer: OfferRights {
 
-    public enum Availability: String, Codable {
+    public enum Availability: String, Codable, Equatable, CaseIterable {
         case available = "Available"
         case comingSoon = "ComingSoon"
-
-        public static let cases: [Availability] = [
-          .available,
-          .comingSoon,
-        ]
     }
 
     public var price: Float
@@ -40,36 +35,27 @@ public class Offer: OfferRights {
         super.init(deliveryType: deliveryType, scopes: scopes, resolution: resolution, ownership: ownership, exclusionRules: exclusionRules, maxDownloads: maxDownloads, maxPlays: maxPlays, playPeriod: playPeriod, rentalPeriod: rentalPeriod)
     }
 
-    private enum CodingKeys: String, CodingKey {
-        case price
-        case availability
-        case endDate
-        case name
-        case startDate
-        case subscriptionCode
-    }
-
     public required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: StringCodingKey.self)
 
-        price = try container.decode(.price)
-        availability = try container.decode(.availability)
-        endDate = try container.decodeIfPresent(.endDate)
-        name = try container.decodeIfPresent(.name)
-        startDate = try container.decodeIfPresent(.startDate)
-        subscriptionCode = try container.decodeIfPresent(.subscriptionCode)
+        price = try container.decode("price")
+        availability = try container.decode("availability")
+        endDate = try container.decodeIfPresent("endDate")
+        name = try container.decodeIfPresent("name")
+        startDate = try container.decodeIfPresent("startDate")
+        subscriptionCode = try container.decodeIfPresent("subscriptionCode")
         try super.init(from: decoder)
     }
 
     public override func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: StringCodingKey.self)
 
-        try container.encode(price, forKey: .price)
-        try container.encode(availability, forKey: .availability)
-        try container.encodeIfPresent(endDate, forKey: .endDate)
-        try container.encodeIfPresent(name, forKey: .name)
-        try container.encodeIfPresent(startDate, forKey: .startDate)
-        try container.encodeIfPresent(subscriptionCode, forKey: .subscriptionCode)
+        try container.encode(price, forKey: "price")
+        try container.encode(availability, forKey: "availability")
+        try container.encodeIfPresent(endDate, forKey: "endDate")
+        try container.encodeIfPresent(name, forKey: "name")
+        try container.encodeIfPresent(startDate, forKey: "startDate")
+        try container.encodeIfPresent(subscriptionCode, forKey: "subscriptionCode")
         try super.encode(to: encoder)
     }
 

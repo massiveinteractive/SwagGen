@@ -8,7 +8,7 @@ import Foundation
 public class Credit: Person {
 
     /** The type of role the credit performed, e.g. actor. */
-    public enum Role: String, Codable {
+    public enum Role: String, Codable, Equatable, CaseIterable {
         case actor = "actor"
         case associateproducer = "associateproducer"
         case coactor = "coactor"
@@ -24,24 +24,6 @@ public class Credit: Person {
         case thememusicby = "thememusicby"
         case voice = "voice"
         case writer = "writer"
-
-        public static let cases: [Role] = [
-          .actor,
-          .associateproducer,
-          .coactor,
-          .director,
-          .executiveproducer,
-          .filminglocation,
-          .guest,
-          .narrator,
-          .other,
-          .presenter,
-          .producer,
-          .productmanager,
-          .thememusicby,
-          .voice,
-          .writer,
-        ]
     }
 
     /** The type of role the credit performed, e.g. actor. */
@@ -56,24 +38,19 @@ public class Credit: Person {
         super.init(name: name, path: path)
     }
 
-    private enum CodingKeys: String, CodingKey {
-        case role
-        case character
-    }
-
     public required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: StringCodingKey.self)
 
-        role = try container.decode(.role)
-        character = try container.decodeIfPresent(.character)
+        role = try container.decode("role")
+        character = try container.decodeIfPresent("character")
         try super.init(from: decoder)
     }
 
     public override func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: StringCodingKey.self)
 
-        try container.encode(role, forKey: .role)
-        try container.encodeIfPresent(character, forKey: .character)
+        try container.encode(role, forKey: "role")
+        try container.encodeIfPresent(character, forKey: "character")
         try super.encode(to: encoder)
     }
 

@@ -7,9 +7,7 @@ import Foundation
 
 extension TFL.StopPoint {
 
-    /**
-    Gets a StopPoint for a given sms code.
-    */
+    /** Gets a StopPoint for a given sms code. */
     public enum StopPointGetBySms {
 
         public static let service = APIService<Response>(id: "StopPoint_GetBySms", tag: "StopPoint", method: "GET", path: "/StopPoint/Sms/{id}", hasBody: false)
@@ -47,7 +45,7 @@ extension TFL.StopPoint {
                 return super.path.replacingOccurrences(of: "{" + "id" + "}", with: "\(self.options.id)")
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 if let output = options.output {
                   params["output"] = output

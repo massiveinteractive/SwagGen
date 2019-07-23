@@ -7,9 +7,7 @@ import Foundation
 
 extension TBX.UserService {
 
-    /**
-    Create a new Device
-    */
+    /** Create a new Device */
     public enum UserServiceCreateDevice {
 
         public static let service = APIService<Response>(id: "UserService.createDevice", tag: "UserService", method: "POST", path: "/UserServices/device", hasBody: true)
@@ -55,7 +53,7 @@ extension TBX.UserService {
                 self.init(options: options)
             }
 
-            public override var parameters: [String: Any] {
+            public override var formParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 params["subscriberId"] = options.subscriberId
                 params["country"] = options.country

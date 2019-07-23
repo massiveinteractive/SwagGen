@@ -7,12 +7,10 @@ import Foundation
 
 extension PetstoreTest.Pet {
 
-    /**
-    Deletes a pet
-    */
+    /** Deletes a pet */
     public enum DeletePet {
 
-        public static let service = APIService<Response>(id: "deletePet", tag: "pet", method: "DELETE", path: "/pet/{petId}", hasBody: false, securityRequirement: SecurityRequirement(type: "petstore_auth", scope: "write:pets"))
+        public static let service = APIService<Response>(id: "deletePet", tag: "pet", method: "DELETE", path: "/pet/{petId}", hasBody: false, securityRequirement: SecurityRequirement(type: "petstore_auth", scopes: ["write:pets", "read:pets"]))
 
         public final class Request: APIRequest<Response> {
 
@@ -44,6 +42,14 @@ extension PetstoreTest.Pet {
 
             public override var path: String {
                 return super.path.replacingOccurrences(of: "{" + "petId" + "}", with: "\(self.options.petId)")
+            }
+
+            override var headerParameters: [String: String] {
+                var headers: [String: String] = [:]
+                if let apiKey = options.apiKey {
+                  headers["api_key"] = apiKey
+                }
+                return headers
             }
         }
 

@@ -7,9 +7,7 @@ import Foundation
 
 extension Petstore.Pets {
 
-    /**
-    List all pets
-    */
+    /** List all pets */
     public enum ListPets {
 
         public static let service = APIService<Response>(id: "listPets", tag: "pets", method: "GET", path: "/pets", hasBody: false)
@@ -39,7 +37,7 @@ extension Petstore.Pets {
                 self.init(options: options)
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 if let limit = options.limit {
                   params["limit"] = limit

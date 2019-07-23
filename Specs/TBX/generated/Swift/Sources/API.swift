@@ -13,6 +13,9 @@ public struct TBX {
     /// Whether to remove invalid elements instead of throwing when decoding arrays
     public static var safeArrayDecoding = false
 
+    /// Used to encode Dates when uses as string params
+    public static let dateEncodingFormatter = DateFormatter(formatString: "yyyy-MM-dd'T'HH:mm:ssZZZZZ")
+
     public static let version = "2.4.1"
 
     public enum AuthorizationService {}
@@ -20,4 +23,8 @@ public struct TBX {
     public enum UserService {}
     public enum Auth {}
 
+    public enum Server {
+
+        public static let main = "/v2"
+    }
 }

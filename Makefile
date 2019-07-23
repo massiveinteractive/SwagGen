@@ -1,5 +1,5 @@
 TOOL_NAME = swaggen
-VERSION = 3.0.2
+VERSION = 4.1.0
 
 PREFIX = /usr/local
 INSTALL_PATH = $(PREFIX)/bin/$(TOOL_NAME)
@@ -11,7 +11,7 @@ RELEASE_TAR = $(REPO)/archive/$(VERSION).tar.gz
 SHA = $(shell curl -L -s $(RELEASE_TAR) | shasum -a 256 | sed 's/ .*//')
 
 build:
-	swift build --disable-sandbox -c release -Xswiftc -static-stdlib
+	swift build --disable-sandbox -c release
 
 install: build
 	mkdir -p $(PREFIX)/bin

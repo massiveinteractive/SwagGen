@@ -7,35 +7,22 @@ import Foundation
 
 extension TFL.Line {
 
-    /**
-    Gets all valid routes for given line id, including the sequence of stops on each route.
-    */
+    /** Gets all valid routes for given line id, including the sequence of stops on each route. */
     public enum LineRouteSequence {
 
         public static let service = APIService<Response>(id: "Line_RouteSequence", tag: "Line", method: "GET", path: "/Line/{id}/Route/Sequence/{direction}", hasBody: false)
 
         /** The direction of travel. Can be inbound or outbound. */
-        public enum Direction: String, Codable {
+        public enum Direction: String, Codable, Equatable, CaseIterable {
             case inbound = "inbound"
             case outbound = "outbound"
             case all = "all"
-
-            public static let cases: [Direction] = [
-              .inbound,
-              .outbound,
-              .all,
-            ]
         }
 
         /** A comma seperated list of service types to filter on. Supported values: Regular, Night. Defaulted to 'Regular' if not specified */
-        public enum ServiceTypes: String, Codable {
+        public enum ServiceTypes: String, Codable, Equatable, CaseIterable {
             case regular = "Regular"
             case night = "Night"
-
-            public static let cases: [ServiceTypes] = [
-              .regular,
-              .night,
-            ]
         }
 
         public final class Request: APIRequest<Response> {
@@ -79,7 +66,7 @@ extension TFL.Line {
                 return super.path.replacingOccurrences(of: "{" + "id" + "}", with: "\(self.options.id)").replacingOccurrences(of: "{" + "direction" + "}", with: "\(self.options.direction.encode())")
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 if let serviceTypes = options.serviceTypes?.encode().map({ String(describing: $0) }).joined(separator: ",") {
                   params["serviceTypes"] = serviceTypes

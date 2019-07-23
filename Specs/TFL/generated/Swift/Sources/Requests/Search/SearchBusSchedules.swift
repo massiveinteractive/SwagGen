@@ -7,9 +7,7 @@ import Foundation
 
 extension TFL.Search {
 
-    /**
-    Searches the bus schedules folder on S3 for a given bus number.
-    */
+    /** Searches the bus schedules folder on S3 for a given bus number. */
     public enum SearchBusSchedules {
 
         public static let service = APIService<Response>(id: "Search_BusSchedules", tag: "Search", method: "GET", path: "/Search/BusSchedules", hasBody: false)
@@ -39,7 +37,7 @@ extension TFL.Search {
                 self.init(options: options)
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 params["query"] = options.query
                 return params

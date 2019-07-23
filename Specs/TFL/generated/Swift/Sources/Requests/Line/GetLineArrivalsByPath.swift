@@ -7,24 +7,16 @@ import Foundation
 
 extension TFL.Line {
 
-    /**
-    Get the list of arrival predictions for given line ids based at the given stop going in the procided direction
-    */
+    /** Get the list of arrival predictions for given line ids based at the given stop going in the procided direction */
     public enum GetLineArrivalsByPath {
 
         public static let service = APIService<Response>(id: "getLineArrivalsByPath", tag: "Line", method: "GET", path: "/Line/{ids}/Arrivals/{stopPointId}", hasBody: false)
 
         /** The direction of travel. Can be inbound or outbound */
-        public enum Direction: String, Codable {
+        public enum Direction: String, Codable, Equatable, CaseIterable {
             case inbound = "inbound"
             case outbound = "outbound"
             case all = "all"
-
-            public static let cases: [Direction] = [
-              .inbound,
-              .outbound,
-              .all,
-            ]
         }
 
         public final class Request: APIRequest<Response> {
@@ -64,7 +56,7 @@ extension TFL.Line {
                 return super.path.replacingOccurrences(of: "{" + "stopPointId" + "}", with: "\(self.options.stopPointId)").replacingOccurrences(of: "{" + "ids" + "}", with: "\(self.options.ids.joined(separator: ","))")
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 params["direction"] = options.direction.encode()
                 return params

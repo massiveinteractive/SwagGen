@@ -7,9 +7,7 @@ import Foundation
 
 extension TBX.Auth {
 
-    /**
-    Return url from SAML logout
-    */
+    /** Return url from SAML logout */
     public enum AuthSamlLogout {
 
         public static let service = APIService<Response>(id: "auth.samlLogout", tag: "auth", method: "GET", path: "/auth/saml/logout", hasBody: false)
@@ -41,7 +39,7 @@ extension TBX.Auth {
                 self.init(options: options)
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 if let sAMLResponse = options.sAMLResponse {
                   params["SAMLResponse"] = sAMLResponse

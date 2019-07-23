@@ -10,6 +10,18 @@ public struct Metadata {
     public let nullable: Bool
     public let example: Any?
     public var json: JSONDictionary
+
+    init() {
+        type = nil
+        title = nil
+        description = nil
+        defaultValue = nil
+        enumValues = nil
+        enumNames = nil
+        nullable = false
+        example = nil
+        json = [:]
+    }
 }
 
 extension Metadata: JSONObjectConvertible {
@@ -21,7 +33,7 @@ extension Metadata: JSONObjectConvertible {
         defaultValue = jsonDictionary["default"]
         enumValues = jsonDictionary["enum"] as? [Any]
         enumNames = jsonDictionary["x-enum-names"] as? [String]
-        nullable = (jsonDictionary.json(atKeyPath: "x-nullable")) ?? false
+        nullable = jsonDictionary.json(atKeyPath: "nullable") ?? jsonDictionary.json(atKeyPath: "x-nullable") ?? false
         example = jsonDictionary["example"]
         json = jsonDictionary
     }

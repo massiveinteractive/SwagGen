@@ -7,9 +7,7 @@ import Foundation
 
 extension TFL.Place {
 
-    /**
-    Gets the place overlay for a given set of co-ordinates and a given width/height.
-    */
+    /** Gets the place overlay for a given set of co-ordinates and a given width/height. */
     public enum PlaceGetOverlay {
 
         public static let service = APIService<Response>(id: "Place_GetOverlay", tag: "Place", method: "GET", path: "/Place/{type}/overlay/{z}/{Lat}/{Lon}/{width}/{height}", hasBody: false)
@@ -67,7 +65,7 @@ extension TFL.Place {
                 return super.path.replacingOccurrences(of: "{" + "z" + "}", with: "\(self.options.z)").replacingOccurrences(of: "{" + "type" + "}", with: "\(self.options.type.joined(separator: ","))").replacingOccurrences(of: "{" + "width" + "}", with: "\(self.options.width)").replacingOccurrences(of: "{" + "height" + "}", with: "\(self.options.height)")
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 params["lat"] = options.lat
                 params["lon"] = options.lon

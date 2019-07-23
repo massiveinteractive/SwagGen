@@ -8,20 +8,12 @@ import Foundation
 public class Subscription: APIModel {
 
     /** The status of a subscription. */
-    public enum Status: String, Codable {
+    public enum Status: String, Codable, Equatable, CaseIterable {
         case active = "Active"
         case cancelled = "Cancelled"
         case lapsed = "Lapsed"
         case expired = "Expired"
         case none = "None"
-
-        public static let cases: [Status] = [
-          .active,
-          .cancelled,
-          .lapsed,
-          .expired,
-          .none,
-        ]
     }
 
     /** The unique subscription code. */
@@ -40,7 +32,6 @@ public class Subscription: APIModel {
     public var status: Status
 
     /** The end date of a subscription.
-
 Some subscriptions may not have an end date, in which case this
 property will not exist.
  */
@@ -55,35 +46,26 @@ property will not exist.
         self.endDate = endDate
     }
 
-    private enum CodingKeys: String, CodingKey {
-        case code
-        case startDate
-        case isTrialPeriod
-        case planId
-        case status
-        case endDate
-    }
-
     public required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: StringCodingKey.self)
 
-        code = try container.decode(.code)
-        startDate = try container.decode(.startDate)
-        isTrialPeriod = try container.decode(.isTrialPeriod)
-        planId = try container.decode(.planId)
-        status = try container.decode(.status)
-        endDate = try container.decodeIfPresent(.endDate)
+        code = try container.decode("code")
+        startDate = try container.decode("startDate")
+        isTrialPeriod = try container.decode("isTrialPeriod")
+        planId = try container.decode("planId")
+        status = try container.decode("status")
+        endDate = try container.decodeIfPresent("endDate")
     }
 
     public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: StringCodingKey.self)
 
-        try container.encode(code, forKey: .code)
-        try container.encode(startDate, forKey: .startDate)
-        try container.encode(isTrialPeriod, forKey: .isTrialPeriod)
-        try container.encode(planId, forKey: .planId)
-        try container.encode(status, forKey: .status)
-        try container.encodeIfPresent(endDate, forKey: .endDate)
+        try container.encode(code, forKey: "code")
+        try container.encode(startDate, forKey: "startDate")
+        try container.encode(isTrialPeriod, forKey: "isTrialPeriod")
+        try container.encode(planId, forKey: "planId")
+        try container.encode(status, forKey: "status")
+        try container.encodeIfPresent(endDate, forKey: "endDate")
     }
 
     public func isEqual(to object: Any?) -> Bool {

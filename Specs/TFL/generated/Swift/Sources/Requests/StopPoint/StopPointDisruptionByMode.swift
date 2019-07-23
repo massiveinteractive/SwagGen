@@ -7,9 +7,7 @@ import Foundation
 
 extension TFL.StopPoint {
 
-    /**
-    Gets a distinct list of disrupted stop points for the given modes
-    */
+    /** Gets a distinct list of disrupted stop points for the given modes */
     public enum StopPointDisruptionByMode {
 
         public static let service = APIService<Response>(id: "StopPoint_DisruptionByMode", tag: "StopPoint", method: "GET", path: "/StopPoint/Mode/{modes}/Disruption", hasBody: false)
@@ -46,7 +44,7 @@ extension TFL.StopPoint {
                 return super.path.replacingOccurrences(of: "{" + "modes" + "}", with: "\(self.options.modes.joined(separator: ","))")
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 if let includeRouteBlockedStops = options.includeRouteBlockedStops {
                   params["includeRouteBlockedStops"] = includeRouteBlockedStops

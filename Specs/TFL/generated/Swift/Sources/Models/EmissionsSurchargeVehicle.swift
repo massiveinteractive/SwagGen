@@ -7,16 +7,10 @@ import Foundation
 
 public class EmissionsSurchargeVehicle: APIModel {
 
-    public enum Compliance: String, Codable {
+    public enum Compliance: String, Codable, Equatable, CaseIterable {
         case notCompliant = "NotCompliant"
         case compliant = "Compliant"
         case exempt = "Exempt"
-
-        public static let cases: [Compliance] = [
-          .notCompliant,
-          .compliant,
-          .exempt,
-        ]
     }
 
     public var colour: String?
@@ -40,35 +34,26 @@ public class EmissionsSurchargeVehicle: APIModel {
         self.vrm = vrm
     }
 
-    private enum CodingKeys: String, CodingKey {
-        case colour
-        case compliance
-        case make
-        case model
-        case type
-        case vrm
-    }
-
     public required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: StringCodingKey.self)
 
-        colour = try container.decodeIfPresent(.colour)
-        compliance = try container.decodeIfPresent(.compliance)
-        make = try container.decodeIfPresent(.make)
-        model = try container.decodeIfPresent(.model)
-        type = try container.decodeIfPresent(.type)
-        vrm = try container.decodeIfPresent(.vrm)
+        colour = try container.decodeIfPresent("colour")
+        compliance = try container.decodeIfPresent("compliance")
+        make = try container.decodeIfPresent("make")
+        model = try container.decodeIfPresent("model")
+        type = try container.decodeIfPresent("type")
+        vrm = try container.decodeIfPresent("vrm")
     }
 
     public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: StringCodingKey.self)
 
-        try container.encodeIfPresent(colour, forKey: .colour)
-        try container.encodeIfPresent(compliance, forKey: .compliance)
-        try container.encodeIfPresent(make, forKey: .make)
-        try container.encodeIfPresent(model, forKey: .model)
-        try container.encodeIfPresent(type, forKey: .type)
-        try container.encodeIfPresent(vrm, forKey: .vrm)
+        try container.encodeIfPresent(colour, forKey: "colour")
+        try container.encodeIfPresent(compliance, forKey: "compliance")
+        try container.encodeIfPresent(make, forKey: "make")
+        try container.encodeIfPresent(model, forKey: "model")
+        try container.encodeIfPresent(type, forKey: "type")
+        try container.encodeIfPresent(vrm, forKey: "vrm")
     }
 
     public func isEqual(to object: Any?) -> Bool {

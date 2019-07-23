@@ -7,9 +7,7 @@ import Foundation
 
 extension TFL.Mode {
 
-    /**
-    Gets the next arrival predictions for all stops of a given mode
-    */
+    /** Gets the next arrival predictions for all stops of a given mode */
     public enum ModeArrivals {
 
         public static let service = APIService<Response>(id: "Mode_Arrivals", tag: "Mode", method: "GET", path: "/Mode/{mode}/Arrivals", hasBody: false)
@@ -47,7 +45,7 @@ extension TFL.Mode {
                 return super.path.replacingOccurrences(of: "{" + "mode" + "}", with: "\(self.options.mode)")
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 if let count = options.count {
                   params["count"] = count

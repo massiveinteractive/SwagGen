@@ -7,25 +7,17 @@ import Foundation
 
 extension Rocket.Profile {
 
-    /**
-    Returns the list of watched items under the active profile.
-    */
+    /** Returns the list of watched items under the active profile. */
     public enum GetWatchedList {
 
-        public static let service = APIService<Response>(id: "getWatchedList", tag: "profile", method: "GET", path: "/account/profile/watched/list", hasBody: false, securityRequirement: SecurityRequirement(type: "profileAuth", scope: "Catalog"))
+        public static let service = APIService<Response>(id: "getWatchedList", tag: "profile", method: "GET", path: "/account/profile/watched/list", hasBody: false, securityRequirement: SecurityRequirement(type: "profileAuth", scopes: ["Catalog"]))
 
         /** What to order by.
-
         Ordering by `date-modified` equates to ordering by the last watched date.
          */
-        public enum OrderBy: String, Codable {
+        public enum OrderBy: String, Codable, Equatable, CaseIterable {
             case dateAdded = "date-added"
             case dateModified = "date-modified"
-
-            public static let cases: [OrderBy] = [
-              .dateAdded,
-              .dateModified,
-            ]
         }
 
         public final class Request: APIRequest<Response> {
@@ -42,7 +34,6 @@ extension Rocket.Profile {
                 public var order: ListOrder?
 
                 /** What to order by.
-
 Ordering by `date-modified` equates to ordering by the last watched date.
  */
                 public var orderBy: OrderBy?
@@ -60,19 +51,14 @@ Ordering by `date-modified` equates to ordering by the last watched date.
                 public var segments: [String]?
 
                 /** The set of opt in feature flags which cause breaking changes to responses.
-
 While Rocket APIs look to avoid breaking changes under the active major version, the formats of responses
 may need to evolve over this time.
-
 These feature flags allow clients to select which response formats they expect and avoid breaking
 clients as these formats evolve under the current major version.
-
 ### Flags
-
 - `all` - Enable all flags. Useful for testing. _Don't use in production_.
 - `idp` - Dynamic item detail pages with schedulable rows.
 - `ldp` - Dynamic list detail pages with schedulable rows.
-
 See the `feature-flags.md` for available flag details.
  */
                 public var ff: [FeatureFlags]?
@@ -103,7 +89,7 @@ See the `feature-flags.md` for available flag details.
                 self.init(options: options)
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 if let page = options.page {
                   params["page"] = page

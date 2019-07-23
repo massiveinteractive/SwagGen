@@ -8,14 +8,9 @@ import Foundation
 public class AccessToken: APIModel {
 
     /** The type of the token. */
-    public enum `Type`: String, Codable {
+    public enum `Type`: String, Codable, Equatable, CaseIterable {
         case userAccount = "UserAccount"
         case userProfile = "UserProfile"
-
-        public static let cases: [`Type`] = [
-          .userAccount,
-          .userProfile,
-        ]
     }
 
     /** The token value used for authenticated requests. */
@@ -37,29 +32,22 @@ public class AccessToken: APIModel {
         self.type = type
     }
 
-    private enum CodingKeys: String, CodingKey {
-        case value
-        case refreshable
-        case expirationDate
-        case type
-    }
-
     public required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: StringCodingKey.self)
 
-        value = try container.decode(.value)
-        refreshable = try container.decode(.refreshable)
-        expirationDate = try container.decode(.expirationDate)
-        type = try container.decode(.type)
+        value = try container.decode("value")
+        refreshable = try container.decode("refreshable")
+        expirationDate = try container.decode("expirationDate")
+        type = try container.decode("type")
     }
 
     public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: StringCodingKey.self)
 
-        try container.encode(value, forKey: .value)
-        try container.encode(refreshable, forKey: .refreshable)
-        try container.encode(expirationDate, forKey: .expirationDate)
-        try container.encode(type, forKey: .type)
+        try container.encode(value, forKey: "value")
+        try container.encode(refreshable, forKey: "refreshable")
+        try container.encode(expirationDate, forKey: "expirationDate")
+        try container.encode(type, forKey: "type")
     }
 
     public func isEqual(to object: Any?) -> Bool {

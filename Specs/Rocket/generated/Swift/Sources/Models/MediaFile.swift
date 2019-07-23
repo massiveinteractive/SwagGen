@@ -8,31 +8,18 @@ import Foundation
 public class MediaFile: APIModel {
 
     /** The way in which the media file is delivered. */
-    public enum DeliveryType: String, Codable {
+    public enum DeliveryType: String, Codable, Equatable, CaseIterable {
         case stream = "Stream"
         case progressive = "Progressive"
         case download = "Download"
-
-        public static let cases: [DeliveryType] = [
-          .stream,
-          .progressive,
-          .download,
-        ]
     }
 
     /** The resolution of the video media. */
-    public enum Resolution: String, Codable {
+    public enum Resolution: String, Codable, Equatable, CaseIterable {
         case sd = "SD"
         case hd720 = "HD-720"
         case hd1080 = "HD-1080"
         case unknown = "Unknown"
-
-        public static let cases: [Resolution] = [
-          .sd,
-          .hd720,
-          .hd1080,
-          .unknown,
-        ]
     }
 
     /** The name of the media file. */
@@ -78,47 +65,34 @@ public class MediaFile: APIModel {
         self.channels = channels
     }
 
-    private enum CodingKeys: String, CodingKey {
-        case name
-        case deliveryType
-        case url
-        case drm
-        case format
-        case resolution
-        case width
-        case height
-        case language
-        case channels
-    }
-
     public required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: StringCodingKey.self)
 
-        name = try container.decode(.name)
-        deliveryType = try container.decode(.deliveryType)
-        url = try container.decode(.url)
-        drm = try container.decode(.drm)
-        format = try container.decode(.format)
-        resolution = try container.decode(.resolution)
-        width = try container.decode(.width)
-        height = try container.decode(.height)
-        language = try container.decode(.language)
-        channels = try container.decodeIfPresent(.channels)
+        name = try container.decode("name")
+        deliveryType = try container.decode("deliveryType")
+        url = try container.decode("url")
+        drm = try container.decode("drm")
+        format = try container.decode("format")
+        resolution = try container.decode("resolution")
+        width = try container.decode("width")
+        height = try container.decode("height")
+        language = try container.decode("language")
+        channels = try container.decodeIfPresent("channels")
     }
 
     public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: StringCodingKey.self)
 
-        try container.encode(name, forKey: .name)
-        try container.encode(deliveryType, forKey: .deliveryType)
-        try container.encode(url, forKey: .url)
-        try container.encode(drm, forKey: .drm)
-        try container.encode(format, forKey: .format)
-        try container.encode(resolution, forKey: .resolution)
-        try container.encode(width, forKey: .width)
-        try container.encode(height, forKey: .height)
-        try container.encode(language, forKey: .language)
-        try container.encodeIfPresent(channels, forKey: .channels)
+        try container.encode(name, forKey: "name")
+        try container.encode(deliveryType, forKey: "deliveryType")
+        try container.encode(url, forKey: "url")
+        try container.encode(drm, forKey: "drm")
+        try container.encode(format, forKey: "format")
+        try container.encode(resolution, forKey: "resolution")
+        try container.encode(width, forKey: "width")
+        try container.encode(height, forKey: "height")
+        try container.encode(language, forKey: "language")
+        try container.encodeIfPresent(channels, forKey: "channels")
     }
 
     public func isEqual(to object: Any?) -> Bool {

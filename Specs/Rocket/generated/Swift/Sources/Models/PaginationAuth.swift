@@ -8,27 +8,16 @@ import Foundation
 public class PaginationAuth: APIModel {
 
     /** The token type required to load the list. */
-    public enum `Type`: String, Codable {
+    public enum `Type`: String, Codable, Equatable, CaseIterable {
         case userAccount = "UserAccount"
         case userProfile = "UserProfile"
-
-        public static let cases: [`Type`] = [
-          .userAccount,
-          .userProfile,
-        ]
     }
 
     /** The token scope required. */
-    public enum Scope: String, Codable {
+    public enum Scope: String, Codable, Equatable, CaseIterable {
         case catalog = "Catalog"
         case commerce = "Commerce"
         case settings = "Settings"
-
-        public static let cases: [Scope] = [
-          .catalog,
-          .commerce,
-          .settings,
-        ]
     }
 
     /** The token type required to load the list. */
@@ -42,23 +31,18 @@ public class PaginationAuth: APIModel {
         self.scope = scope
     }
 
-    private enum CodingKeys: String, CodingKey {
-        case type
-        case scope
-    }
-
     public required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: StringCodingKey.self)
 
-        type = try container.decode(.type)
-        scope = try container.decode(.scope)
+        type = try container.decode("type")
+        scope = try container.decode("scope")
     }
 
     public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: StringCodingKey.self)
 
-        try container.encode(type, forKey: .type)
-        try container.encode(scope, forKey: .scope)
+        try container.encode(type, forKey: "type")
+        try container.encode(scope, forKey: "scope")
     }
 
     public func isEqual(to object: Any?) -> Bool {

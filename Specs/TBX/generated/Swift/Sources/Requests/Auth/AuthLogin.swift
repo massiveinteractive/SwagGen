@@ -7,9 +7,7 @@ import Foundation
 
 extension TBX.Auth {
 
-    /**
-    URL for the client can start a new login with your IDP
-    */
+    /** URL for the client can start a new login with your IDP */
     public enum AuthLogin {
 
         public static let service = APIService<Response>(id: "auth.login", tag: "auth", method: "GET", path: "/auth/{cp}/login.html", hasBody: false)
@@ -63,7 +61,7 @@ extension TBX.Auth {
                 return super.path.replacingOccurrences(of: "{" + "cp" + "}", with: "\(self.options.cp)")
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 params["idp"] = options.idp
                 if let `return` = options.`return` {

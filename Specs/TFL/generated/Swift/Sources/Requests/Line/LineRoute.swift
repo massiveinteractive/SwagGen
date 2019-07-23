@@ -7,22 +7,15 @@ import Foundation
 
 extension TFL.Line {
 
-    /**
-    Get all valid routes for all lines, including the name and id of the originating and terminating stops for each route.
-    */
+    /** Get all valid routes for all lines, including the name and id of the originating and terminating stops for each route. */
     public enum LineRoute {
 
         public static let service = APIService<Response>(id: "Line_Route", tag: "Line", method: "GET", path: "/Line/Route", hasBody: false)
 
         /** A comma seperated list of service types to filter on. Supported values: Regular, Night. Defaulted to 'Regular' if not specified */
-        public enum ServiceTypes: String, Codable {
+        public enum ServiceTypes: String, Codable, Equatable, CaseIterable {
             case regular = "Regular"
             case night = "Night"
-
-            public static let cases: [ServiceTypes] = [
-              .regular,
-              .night,
-            ]
         }
 
         public final class Request: APIRequest<Response> {
@@ -50,7 +43,7 @@ extension TFL.Line {
                 self.init(options: options)
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 if let serviceTypes = options.serviceTypes?.encode().map({ String(describing: $0) }).joined(separator: ",") {
                   params["serviceTypes"] = serviceTypes

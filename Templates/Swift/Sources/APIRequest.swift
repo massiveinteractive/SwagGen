@@ -5,25 +5,30 @@ import Foundation
 public class APIRequest<ResponseType: APIResponseValue> {
 
     public let service: APIService<ResponseType>
-    public private(set) var parameters: [String: Any]
+    public private(set) var queryParameters: [String: Any]
+    public private(set) var formParameters: [String: Any]
     public let encodeBody: (() throws -> Data)?
-    public var headers: [String: String] = [:]
+    private(set) var headerParameters: [String: String]
+    public var customHeaders: [String: String] = [:]
+
+    public var headers: [String: String] {
+        return headerParameters.merging(customHeaders) { param, custom in return custom }
+    }
 
     public var path: String {
         return service.path
     }
 
-    public init(service: APIService<ResponseType>, parameters: [String: Any] = [:], headers: [String: String] = [:], encodeBody: (() throws -> Data)? = nil) {
+    public init(service: APIService<ResponseType>, 
+                queryParameters: [String: Any] = [:], 
+                formParameters: [String: Any] = [:],
+                headers: [String: String] = [:], 
+                encodeBody: (() throws -> Data)? = nil) {
         self.service = service
-        self.parameters = parameters
-        self.headers = headers
+        self.queryParameters = queryParameters
+        self.formParameters = formParameters
+        self.headerParameters = headers
         self.encodeBody = encodeBody
-    }
-
-    public func addHeader(name: String, value: String) {
-        if !value.isEmpty {
-            headers[name] = value
-        }
     }
 }
 
@@ -31,8 +36,8 @@ extension APIRequest: CustomStringConvertible {
 
     public var description: String {
         var string = "\(service.name): \(service.method) \(path)"
-        if !parameters.isEmpty {
-            string += "?" + parameters.map {"\($0)=\($1)"}.joined(separator: "&")
+        if !queryParameters.isEmpty {
+            string += "?" + queryParameters.map {"\($0)=\($1)"}.joined(separator: "&")
         }
         return string
     }
@@ -51,20 +56,26 @@ extension APIRequest: CustomDebugStringConvertible {
     }
 }
 
-/// A file upload. Must provide both fileName and mimeType for them to be passed along
-public struct File {
+/// A file upload
+public struct UploadFile: Equatable {
 
-    public var type: FileType
-    public var fileName: String?
-    public var mimeType: String?
+    public let type: FileType
+    public let fileName: String?
+    public let mimeType: String?
 
-    public init(type: FileType, fileName: String? = nil, mimeType: String? = nil) {
+    public init(type: FileType) {
+        self.type = type
+        self.fileName = nil
+        self.mimeType = nil
+    }
+
+    public init(type: FileType, fileName: String, mimeType: String) {
         self.type = type
         self.fileName = fileName
         self.mimeType = mimeType
     }
 
-    public enum FileType {
+    public enum FileType: Equatable {
         case data(Data)
         case url(URL)
     }

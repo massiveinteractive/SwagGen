@@ -7,9 +7,7 @@ import Foundation
 
 extension TBX.UserService {
 
-    /**
-    Check if the Customer has access to execute an action with the URN
-    */
+    /** Check if the Customer has access to execute an action with the URN */
     public enum UserServiceHasAccessTo {
 
         public static let service = APIService<Response>(id: "UserService.hasAccessTo", tag: "UserService", method: "GET", path: "/UserServices/{customer}/hasAccessTo", hasBody: false)
@@ -55,7 +53,7 @@ extension TBX.UserService {
                 return super.path.replacingOccurrences(of: "{" + "customer" + "}", with: "\(self.options.customer)")
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 params["urn"] = options.urn
                 params["action"] = options.action

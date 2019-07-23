@@ -9,12 +9,12 @@ let package = Package(
         .library(name: "Swagger", targets: ["Swagger"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/kylef/PathKit.git", from: "0.8.0"),
+        .package(url: "https://github.com/kylef/PathKit.git", from: "0.9.0"),
         .package(url: "https://github.com/jakeheis/SwiftCLI", .upToNextMinor(from: "5.2.2")),
         .package(url: "https://github.com/stencilproject/Stencil.git", from: "0.13.0"),
         .package(url: "https://github.com/jpsim/Yams.git", from: "1.0.0"),
         .package(url: "https://github.com/yonaskolb/JSONUtilities.git", from: "4.1.0"),
-        .package(url: "https://github.com/kylef/Spectre.git", from: "0.7.0"),
+        .package(url: "https://github.com/kylef/Spectre.git", from: "0.9.0"),
         .package(url: "https://github.com/onevcat/Rainbow.git", from: "3.1.0"),
     ],
     targets: [
@@ -28,7 +28,7 @@ let package = Package(
           "Swagger",
           "JSONUtilities",
           "PathKit",
-          "Stencil",
+          "StencilSwiftKit",
         ]),
         .target(name: "Swagger", dependencies: [
           "JSONUtilities",
@@ -37,6 +37,7 @@ let package = Package(
         ]),
         .testTarget(name: "SwagGenKitTests", dependencies: [
           "SwagGenKit",
+          "Spectre",
         ]),
         .testTarget(name: "SwaggerTests", dependencies: [
           "Swagger",

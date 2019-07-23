@@ -7,9 +7,7 @@ import Foundation
 
 extension TFL.StopPoint {
 
-    /**
-    Search StopPoints by their common name, or their 5-digit Countdown Bus Stop Code.
-    */
+    /** Search StopPoints by their common name, or their 5-digit Countdown Bus Stop Code. */
     public enum SearchStopPointsByPath {
 
         public static let service = APIService<Response>(id: "searchStopPointsByPath", tag: "StopPoint", method: "GET", path: "/StopPoint/Search/{query}", hasBody: false)
@@ -64,7 +62,7 @@ extension TFL.StopPoint {
                 return super.path.replacingOccurrences(of: "{" + "query" + "}", with: "\(self.options.query)")
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 if let modes = options.modes?.joined(separator: ",") {
                   params["modes"] = modes

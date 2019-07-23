@@ -7,9 +7,7 @@ import Foundation
 
 extension TFL.Road {
 
-    /**
-    Gets the specified roads with the status aggregated over the date range specified, or now until the end of today if no dates are passed.
-    */
+    /** Gets the specified roads with the status aggregated over the date range specified, or now until the end of today if no dates are passed. */
     public enum RoadStatus {
 
         public static let service = APIService<Response>(id: "Road_Status", tag: "Road", method: "GET", path: "/Road/{ids}/Status", hasBody: false)
@@ -49,7 +47,7 @@ extension TFL.Road {
                 return super.path.replacingOccurrences(of: "{" + "ids" + "}", with: "\(self.options.ids.joined(separator: ","))")
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 if let dateRangeNullableStartDate = options.dateRangeNullableStartDate?.encode() {
                   params["dateRangeNullable.startDate"] = dateRangeNullableStartDate

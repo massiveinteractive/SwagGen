@@ -7,9 +7,7 @@ import Foundation
 
 extension TFL.StopPoint {
 
-    /**
-    Gets the service types for a given stoppoint
-    */
+    /** Gets the service types for a given stoppoint */
     public enum StopPointGetServiceTypes {
 
         public static let service = APIService<Response>(id: "StopPoint_GetServiceTypes", tag: "StopPoint", method: "GET", path: "/StopPoint/ServiceTypes", hasBody: false)
@@ -47,7 +45,7 @@ extension TFL.StopPoint {
                 self.init(options: options)
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 params["id"] = options.id
                 if let lineIds = options.lineIds?.joined(separator: ",") {

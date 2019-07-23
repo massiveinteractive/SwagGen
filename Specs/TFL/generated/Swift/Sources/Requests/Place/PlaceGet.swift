@@ -7,9 +7,7 @@ import Foundation
 
 extension TFL.Place {
 
-    /**
-    Gets the place with the given id.
-    */
+    /** Gets the place with the given id. */
     public enum PlaceGet {
 
         public static let service = APIService<Response>(id: "Place_Get", tag: "Place", method: "GET", path: "/Place/{id}", hasBody: false)
@@ -47,7 +45,7 @@ extension TFL.Place {
                 return super.path.replacingOccurrences(of: "{" + "id" + "}", with: "\(self.options.id)")
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 if let includeChildren = options.includeChildren {
                   params["includeChildren"] = includeChildren

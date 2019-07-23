@@ -7,9 +7,7 @@ import Foundation
 
 extension TFL.Road {
 
-    /**
-    Gets a list of active disruptions filtered by disruption Ids.
-    */
+    /** Gets a list of active disruptions filtered by disruption Ids. */
     public enum RoadDisruptionById {
 
         public static let service = APIService<Response>(id: "Road_DisruptionById", tag: "Road", method: "GET", path: "/Road/all/Disruption/{disruptionIds}", hasBody: false)
@@ -47,7 +45,7 @@ extension TFL.Road {
                 return super.path.replacingOccurrences(of: "{" + "disruptionIds" + "}", with: "\(self.options.disruptionIds.joined(separator: ","))")
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 if let stripContent = options.stripContent {
                   params["stripContent"] = stripContent

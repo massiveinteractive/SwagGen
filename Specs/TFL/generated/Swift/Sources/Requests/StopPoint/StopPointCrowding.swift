@@ -7,24 +7,16 @@ import Foundation
 
 extension TFL.StopPoint {
 
-    /**
-    Gets all the Crowding data (static) for the StopPointId, plus crowding data for a given line and optionally a particular direction.
-    */
+    /** Gets all the Crowding data (static) for the StopPointId, plus crowding data for a given line and optionally a particular direction. */
     public enum StopPointCrowding {
 
         public static let service = APIService<Response>(id: "StopPoint_Crowding", tag: "StopPoint", method: "GET", path: "/StopPoint/{id}/Crowding/{line}", hasBody: false)
 
         /** The direction of travel. Can be inbound or outbound. */
-        public enum Direction: String, Codable {
+        public enum Direction: String, Codable, Equatable, CaseIterable {
             case inbound = "inbound"
             case outbound = "outbound"
             case all = "all"
-
-            public static let cases: [Direction] = [
-              .inbound,
-              .outbound,
-              .all,
-            ]
         }
 
         public final class Request: APIRequest<Response> {
@@ -64,7 +56,7 @@ extension TFL.StopPoint {
                 return super.path.replacingOccurrences(of: "{" + "id" + "}", with: "\(self.options.id)").replacingOccurrences(of: "{" + "line" + "}", with: "\(self.options.line)")
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 params["direction"] = options.direction.encode()
                 return params

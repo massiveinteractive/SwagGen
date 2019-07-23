@@ -7,22 +7,15 @@ import Foundation
 
 extension TFL.StopPoint {
 
-    /**
-    Returns the route sections for all the lines that service the given stop point ids
-    */
+    /** Returns the route sections for all the lines that service the given stop point ids */
     public enum StopPointRoute {
 
         public static let service = APIService<Response>(id: "StopPoint_Route", tag: "StopPoint", method: "GET", path: "/StopPoint/{id}/Route", hasBody: false)
 
         /** A comma-separated list of service types to filter on. If not specified. Supported values: Regular, Night. Defaulted to 'Regular' if not specified */
-        public enum ServiceTypes: String, Codable {
+        public enum ServiceTypes: String, Codable, Equatable, CaseIterable {
             case regular = "Regular"
             case night = "Night"
-
-            public static let cases: [ServiceTypes] = [
-              .regular,
-              .night,
-            ]
         }
 
         public final class Request: APIRequest<Response> {
@@ -58,7 +51,7 @@ extension TFL.StopPoint {
                 return super.path.replacingOccurrences(of: "{" + "id" + "}", with: "\(self.options.id)")
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 if let serviceTypes = options.serviceTypes?.encode().map({ String(describing: $0) }).joined(separator: ",") {
                   params["serviceTypes"] = serviceTypes

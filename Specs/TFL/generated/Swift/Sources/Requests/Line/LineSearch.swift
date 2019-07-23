@@ -7,22 +7,15 @@ import Foundation
 
 extension TFL.Line {
 
-    /**
-    Search for lines or routes matching the query string
-    */
+    /** Search for lines or routes matching the query string */
     public enum LineSearch {
 
         public static let service = APIService<Response>(id: "Line_Search", tag: "Line", method: "GET", path: "/Line/Search/{query}", hasBody: false)
 
         /** A comma seperated list of service types to filter on. Supported values: Regular, Night. Defaulted to 'Regular' if not specified */
-        public enum ServiceTypes: String, Codable {
+        public enum ServiceTypes: String, Codable, Equatable, CaseIterable {
             case regular = "Regular"
             case night = "Night"
-
-            public static let cases: [ServiceTypes] = [
-              .regular,
-              .night,
-            ]
         }
 
         public final class Request: APIRequest<Response> {
@@ -62,7 +55,7 @@ extension TFL.Line {
                 return super.path.replacingOccurrences(of: "{" + "query" + "}", with: "\(self.options.query)")
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 if let modes = options.modes?.joined(separator: ",") {
                   params["modes"] = modes

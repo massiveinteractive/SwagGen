@@ -7,10 +7,8 @@ import Foundation
 
 extension TFL.Search {
 
-    /**
-    Search the site for occurrences of the query string. The maximum number of results returned is equal to the maximum page size
-            of 100. To return subsequent pages, use the paginated overload.
-    */
+    /** Search the site for occurrences of the query string. The maximum number of results returned is equal to the maximum page size
+            of 100. To return subsequent pages, use the paginated overload. */
     public enum SearchGet {
 
         public static let service = APIService<Response>(id: "Search_Get", tag: "Search", method: "GET", path: "/Search", hasBody: false)
@@ -40,7 +38,7 @@ extension TFL.Search {
                 self.init(options: options)
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 params["query"] = options.query
                 return params

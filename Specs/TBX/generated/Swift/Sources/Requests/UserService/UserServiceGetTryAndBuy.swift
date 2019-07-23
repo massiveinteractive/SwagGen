@@ -7,9 +7,7 @@ import Foundation
 
 extension TBX.UserService {
 
-    /**
-    Get Try and Buy data by customerId
-    */
+    /** Get Try and Buy data by customerId */
     public enum UserServiceGetTryAndBuy {
 
         public static let service = APIService<Response>(id: "UserService.getTryAndBuy", tag: "UserService", method: "GET", path: "/UserServices/{customer}/tryAndBuy", hasBody: false)
@@ -47,7 +45,7 @@ extension TBX.UserService {
                 return super.path.replacingOccurrences(of: "{" + "customer" + "}", with: "\(self.options.customer)")
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 if let device = options.device {
                   params["device"] = device

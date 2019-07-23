@@ -14,6 +14,9 @@ public struct PetstoreTest {
     /// Whether to remove invalid elements instead of throwing when decoding arrays
     public static var safeArrayDecoding = false
 
+    /// Used to encode Dates when uses as string params
+    public static let dateEncodingFormatter = DateFormatter(formatString: "yyyy-MM-dd'T'HH:mm:ssZZZZZ")
+
     public static let version = "1.0.0"
 
     public enum Fake {}
@@ -21,4 +24,8 @@ public struct PetstoreTest {
     public enum Store {}
     public enum User {}
 
+    public enum Server {
+
+        public static let main = "http://petstore.swagger.io:80/v2"
+    }
 }

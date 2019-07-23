@@ -7,12 +7,10 @@ import Foundation
 
 extension Rocket.Account {
 
-    /**
-    Rename a device
-    */
+    /** Rename a device */
     public enum RenameDevice {
 
-        public static let service = APIService<Response>(id: "renameDevice", tag: "account", method: "PUT", path: "/account/devices/{id}/name", hasBody: false, securityRequirement: SecurityRequirement(type: "accountAuth", scope: "Catalog"))
+        public static let service = APIService<Response>(id: "renameDevice", tag: "account", method: "PUT", path: "/account/devices/{id}/name", hasBody: false, securityRequirement: SecurityRequirement(type: "accountAuth", scopes: ["Catalog"]))
 
         public final class Request: APIRequest<Response> {
 
@@ -47,7 +45,7 @@ extension Rocket.Account {
                 return super.path.replacingOccurrences(of: "{" + "id" + "}", with: "\(self.options.id)")
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 params["name"] = options.name
                 return params

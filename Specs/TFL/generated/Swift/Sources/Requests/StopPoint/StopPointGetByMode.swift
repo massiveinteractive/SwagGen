@@ -7,9 +7,7 @@ import Foundation
 
 extension TFL.StopPoint {
 
-    /**
-    Gets a list of StopPoints filtered by the modes available at that StopPoint.
-    */
+    /** Gets a list of StopPoints filtered by the modes available at that StopPoint. */
     public enum StopPointGetByMode {
 
         public static let service = APIService<Response>(id: "StopPoint_GetByMode", tag: "StopPoint", method: "GET", path: "/StopPoint/Mode/{modes}", hasBody: false)
@@ -47,7 +45,7 @@ extension TFL.StopPoint {
                 return super.path.replacingOccurrences(of: "{" + "modes" + "}", with: "\(self.options.modes.joined(separator: ","))")
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 if let page = options.page {
                   params["page"] = page

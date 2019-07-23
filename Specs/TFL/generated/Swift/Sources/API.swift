@@ -13,6 +13,9 @@ public struct TFL {
     /// Whether to remove invalid elements instead of throwing when decoding arrays
     public static var safeArrayDecoding = false
 
+    /// Used to encode Dates when uses as string params
+    public static let dateEncodingFormatter = DateFormatter(formatString: "yyyy-MM-dd'T'HH:mm:ssZZZZZ")
+
     public static let version = "v1"
 
     public enum AccidentStats {}
@@ -30,4 +33,8 @@ public struct TFL {
     public enum TravelTime {}
     public enum Vehicle {}
 
+    public enum Server {
+
+        public static let main = "https://api.tfl.gov.uk"
+    }
 }

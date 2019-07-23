@@ -9,52 +9,29 @@ import Foundation
 public class OfferRights: APIModel {
 
     /** The base type for both Offer and Entitlement. */
-    public enum DeliveryType: String, Codable {
+    public enum DeliveryType: String, Codable, Equatable, CaseIterable {
         case stream = "Stream"
         case download = "Download"
         case streamOrDownload = "StreamOrDownload"
         case progressiveDownload = "ProgressiveDownload"
         case none = "None"
-
-        public static let cases: [DeliveryType] = [
-          .stream,
-          .download,
-          .streamOrDownload,
-          .progressiveDownload,
-          .none,
-        ]
     }
 
     /** The base type for both Offer and Entitlement. */
-    public enum Resolution: String, Codable {
+    public enum Resolution: String, Codable, Equatable, CaseIterable {
         case sd = "SD"
         case hd720 = "HD-720"
         case hd1080 = "HD-1080"
         case unknown = "Unknown"
-
-        public static let cases: [Resolution] = [
-          .sd,
-          .hd720,
-          .hd1080,
-          .unknown,
-        ]
     }
 
     /** The base type for both Offer and Entitlement. */
-    public enum Ownership: String, Codable {
+    public enum Ownership: String, Codable, Equatable, CaseIterable {
         case subscription = "Subscription"
         case free = "Free"
         case rent = "Rent"
         case own = "Own"
         case none = "None"
-
-        public static let cases: [Ownership] = [
-          .subscription,
-          .free,
-          .rent,
-          .own,
-          .none,
-        ]
     }
 
     public var deliveryType: DeliveryType
@@ -92,44 +69,32 @@ public class OfferRights: APIModel {
         self.rentalPeriod = rentalPeriod
     }
 
-    private enum CodingKeys: String, CodingKey {
-        case deliveryType
-        case scopes
-        case resolution
-        case ownership
-        case exclusionRules
-        case maxDownloads
-        case maxPlays
-        case playPeriod
-        case rentalPeriod
-    }
-
     public required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: StringCodingKey.self)
 
-        deliveryType = try container.decode(.deliveryType)
-        scopes = try container.decodeArray(.scopes)
-        resolution = try container.decode(.resolution)
-        ownership = try container.decode(.ownership)
-        exclusionRules = try container.decodeArrayIfPresent(.exclusionRules)
-        maxDownloads = try container.decodeIfPresent(.maxDownloads)
-        maxPlays = try container.decodeIfPresent(.maxPlays)
-        playPeriod = try container.decodeIfPresent(.playPeriod)
-        rentalPeriod = try container.decodeIfPresent(.rentalPeriod)
+        deliveryType = try container.decode("deliveryType")
+        scopes = try container.decodeArray("scopes")
+        resolution = try container.decode("resolution")
+        ownership = try container.decode("ownership")
+        exclusionRules = try container.decodeArrayIfPresent("exclusionRules")
+        maxDownloads = try container.decodeIfPresent("maxDownloads")
+        maxPlays = try container.decodeIfPresent("maxPlays")
+        playPeriod = try container.decodeIfPresent("playPeriod")
+        rentalPeriod = try container.decodeIfPresent("rentalPeriod")
     }
 
     public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: StringCodingKey.self)
 
-        try container.encode(deliveryType, forKey: .deliveryType)
-        try container.encode(scopes, forKey: .scopes)
-        try container.encode(resolution, forKey: .resolution)
-        try container.encode(ownership, forKey: .ownership)
-        try container.encodeIfPresent(exclusionRules, forKey: .exclusionRules)
-        try container.encodeIfPresent(maxDownloads, forKey: .maxDownloads)
-        try container.encodeIfPresent(maxPlays, forKey: .maxPlays)
-        try container.encodeIfPresent(playPeriod, forKey: .playPeriod)
-        try container.encodeIfPresent(rentalPeriod, forKey: .rentalPeriod)
+        try container.encode(deliveryType, forKey: "deliveryType")
+        try container.encode(scopes, forKey: "scopes")
+        try container.encode(resolution, forKey: "resolution")
+        try container.encode(ownership, forKey: "ownership")
+        try container.encodeIfPresent(exclusionRules, forKey: "exclusionRules")
+        try container.encodeIfPresent(maxDownloads, forKey: "maxDownloads")
+        try container.encodeIfPresent(maxPlays, forKey: "maxPlays")
+        try container.encodeIfPresent(playPeriod, forKey: "playPeriod")
+        try container.encodeIfPresent(rentalPeriod, forKey: "rentalPeriod")
     }
 
     public func isEqual(to object: Any?) -> Bool {

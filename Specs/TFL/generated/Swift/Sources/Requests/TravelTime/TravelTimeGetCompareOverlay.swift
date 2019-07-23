@@ -7,24 +7,16 @@ import Foundation
 
 extension TFL.TravelTime {
 
-    /**
-    Gets the TravelTime overlay.
-    */
+    /** Gets the TravelTime overlay. */
     public enum TravelTimeGetCompareOverlay {
 
         public static let service = APIService<Response>(id: "TravelTime_GetCompareOverlay", tag: "TravelTime", method: "GET", path: "/TravelTimes/compareOverlay/{z}/mapcenter/{mapCenterLat}/{mapCenterLon}/pinlocation/{pinLat}/{pinLon}/dimensions/{width}/{height}", hasBody: false)
 
         /** The direction of travel. */
-        public enum Direction: String, Codable {
+        public enum Direction: String, Codable, Equatable, CaseIterable {
             case average = "Average"
             case from = "From"
             case to = "To"
-
-            public static let cases: [Direction] = [
-              .average,
-              .from,
-              .to,
-            ]
         }
 
         public final class Request: APIRequest<Response> {
@@ -106,7 +98,7 @@ extension TFL.TravelTime {
                 return super.path.replacingOccurrences(of: "{" + "z" + "}", with: "\(self.options.z)").replacingOccurrences(of: "{" + "pinLat" + "}", with: "\(self.options.pinLat)").replacingOccurrences(of: "{" + "pinLon" + "}", with: "\(self.options.pinLon)").replacingOccurrences(of: "{" + "mapCenterLat" + "}", with: "\(self.options.mapCenterLat)").replacingOccurrences(of: "{" + "mapCenterLon" + "}", with: "\(self.options.mapCenterLon)").replacingOccurrences(of: "{" + "width" + "}", with: "\(self.options.width)").replacingOccurrences(of: "{" + "height" + "}", with: "\(self.options.height)")
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 params["scenarioTitle"] = options.scenarioTitle
                 params["timeOfDayId"] = options.timeOfDayId

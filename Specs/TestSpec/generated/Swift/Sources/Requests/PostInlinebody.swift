@@ -5,19 +5,17 @@
 
 import Foundation
 
-extension TestSpec.TestTag {
+extension TestSpec {
 
-    /**
-    operation with an inline body
-    */
+    /** operation with an inline body */
     public enum PostInlinebody {
 
-        public static let service = APIService<Response>(id: "postInlinebody", tag: "TestTag", method: "POST", path: "/inlinebody", hasBody: true, securityRequirement: SecurityRequirement(type: "test_auth", scope: "write"))
+        public static let service = APIService<Response>(id: "postInlinebody", tag: "", method: "POST", path: "/inlinebody", hasBody: true, securityRequirement: SecurityRequirement(type: "test_auth", scopes: ["write"]))
 
         public final class Request: APIRequest<Response> {
 
             /** operation with an inline body */
-            public class Item: APIModel {
+            public class Body: APIModel {
 
                 public var id: Int?
 
@@ -28,44 +26,39 @@ extension TestSpec.TestTag {
                     self.name = name
                 }
 
-                private enum CodingKeys: String, CodingKey {
-                    case id
-                    case name
-                }
-
                 public required init(from decoder: Decoder) throws {
-                    let container = try decoder.container(keyedBy: CodingKeys.self)
+                    let container = try decoder.container(keyedBy: StringCodingKey.self)
 
-                    id = try container.decodeIfPresent(.id)
-                    name = try container.decodeIfPresent(.name)
+                    id = try container.decodeIfPresent("id")
+                    name = try container.decodeIfPresent("name")
                 }
 
                 public func encode(to encoder: Encoder) throws {
-                    var container = encoder.container(keyedBy: CodingKeys.self)
+                    var container = encoder.container(keyedBy: StringCodingKey.self)
 
-                    try container.encodeIfPresent(id, forKey: .id)
-                    try container.encodeIfPresent(name, forKey: .name)
+                    try container.encodeIfPresent(id, forKey: "id")
+                    try container.encodeIfPresent(name, forKey: "name")
                 }
 
                 public func isEqual(to object: Any?) -> Bool {
-                  guard let object = object as? Item else { return false }
+                  guard let object = object as? Body else { return false }
                   guard self.id == object.id else { return false }
                   guard self.name == object.name else { return false }
                   return true
                 }
 
-                public static func == (lhs: Item, rhs: Item) -> Bool {
+                public static func == (lhs: Body, rhs: Body) -> Bool {
                     return lhs.isEqual(to: rhs)
                 }
             }
 
-            public var item: Item
+            public var body: Body
 
-            public init(item: Item) {
-                self.item = item
+            public init(body: Body) {
+                self.body = body
                 super.init(service: PostInlinebody.service) {
                     let jsonEncoder = JSONEncoder()
-                    return try jsonEncoder.encode(item)
+                    return try jsonEncoder.encode(body)
                 }
             }
         }

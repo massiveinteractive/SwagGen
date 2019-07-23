@@ -9,35 +9,20 @@ import Foundation
 public class ExclusionRule: APIModel {
 
     /** Defines playback exclusion rules for an Offer or Entitlement. */
-    public enum ExcludeDelivery: String, Codable {
+    public enum ExcludeDelivery: String, Codable, Equatable, CaseIterable {
         case stream = "Stream"
         case download = "Download"
         case streamOrDownload = "StreamOrDownload"
         case progressiveDownload = "ProgressiveDownload"
         case none = "None"
-
-        public static let cases: [ExcludeDelivery] = [
-          .stream,
-          .download,
-          .streamOrDownload,
-          .progressiveDownload,
-          .none,
-        ]
     }
 
     /** Defines playback exclusion rules for an Offer or Entitlement. */
-    public enum ExcludeMinResolution: String, Codable {
+    public enum ExcludeMinResolution: String, Codable, Equatable, CaseIterable {
         case sd = "SD"
         case hd720 = "HD-720"
         case hd1080 = "HD-1080"
         case unknown = "Unknown"
-
-        public static let cases: [ExcludeMinResolution] = [
-          .sd,
-          .hd720,
-          .hd1080,
-          .unknown,
-        ]
     }
 
     public var description: String?
@@ -64,35 +49,26 @@ public class ExclusionRule: APIModel {
         self.excludeMinResolution = excludeMinResolution
     }
 
-    private enum CodingKeys: String, CodingKey {
-        case description
-        case device
-        case excludeAirplay
-        case excludeChromecast
-        case excludeDelivery
-        case excludeMinResolution
-    }
-
     public required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: StringCodingKey.self)
 
-        description = try container.decodeIfPresent(.description)
-        device = try container.decodeIfPresent(.device)
-        excludeAirplay = try container.decodeIfPresent(.excludeAirplay)
-        excludeChromecast = try container.decodeIfPresent(.excludeChromecast)
-        excludeDelivery = try container.decodeIfPresent(.excludeDelivery)
-        excludeMinResolution = try container.decodeIfPresent(.excludeMinResolution)
+        description = try container.decodeIfPresent("description")
+        device = try container.decodeIfPresent("device")
+        excludeAirplay = try container.decodeIfPresent("excludeAirplay")
+        excludeChromecast = try container.decodeIfPresent("excludeChromecast")
+        excludeDelivery = try container.decodeIfPresent("excludeDelivery")
+        excludeMinResolution = try container.decodeIfPresent("excludeMinResolution")
     }
 
     public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: StringCodingKey.self)
 
-        try container.encodeIfPresent(description, forKey: .description)
-        try container.encodeIfPresent(device, forKey: .device)
-        try container.encodeIfPresent(excludeAirplay, forKey: .excludeAirplay)
-        try container.encodeIfPresent(excludeChromecast, forKey: .excludeChromecast)
-        try container.encodeIfPresent(excludeDelivery, forKey: .excludeDelivery)
-        try container.encodeIfPresent(excludeMinResolution, forKey: .excludeMinResolution)
+        try container.encodeIfPresent(description, forKey: "description")
+        try container.encodeIfPresent(device, forKey: "device")
+        try container.encodeIfPresent(excludeAirplay, forKey: "excludeAirplay")
+        try container.encodeIfPresent(excludeChromecast, forKey: "excludeChromecast")
+        try container.encodeIfPresent(excludeDelivery, forKey: "excludeDelivery")
+        try container.encodeIfPresent(excludeMinResolution, forKey: "excludeMinResolution")
     }
 
     public func isEqual(to object: Any?) -> Bool {

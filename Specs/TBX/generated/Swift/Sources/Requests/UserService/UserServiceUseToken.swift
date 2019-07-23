@@ -7,9 +7,7 @@ import Foundation
 
 extension TBX.UserService {
 
-    /**
-    Use a Token
-    */
+    /** Use a Token */
     public enum UserServiceUseToken {
 
         public static let service = APIService<Response>(id: "UserService.useToken", tag: "UserService", method: "PUT", path: "/UserServices/token/{token}", hasBody: true)
@@ -55,7 +53,7 @@ extension TBX.UserService {
                 return super.path.replacingOccurrences(of: "{" + "token" + "}", with: "\(self.options.token)")
             }
 
-            public override var parameters: [String: Any] {
+            public override var formParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 params["deviceType"] = options.deviceType
                 params["description"] = options.description

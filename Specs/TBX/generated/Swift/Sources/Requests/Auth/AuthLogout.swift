@@ -7,9 +7,7 @@ import Foundation
 
 extension TBX.Auth {
 
-    /**
-    URL for the client can start a logout with your IDP
-    */
+    /** URL for the client can start a logout with your IDP */
     public enum AuthLogout {
 
         public static let service = APIService<Response>(id: "auth.logout", tag: "auth", method: "GET", path: "/auth/{cp}/logout.json", hasBody: false)
@@ -51,7 +49,7 @@ extension TBX.Auth {
                 return super.path.replacingOccurrences(of: "{" + "cp" + "}", with: "\(self.options.cp)")
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 if let url = options.url {
                   params["url"] = url

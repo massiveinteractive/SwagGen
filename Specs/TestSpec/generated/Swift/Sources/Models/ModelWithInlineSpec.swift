@@ -10,6 +10,7 @@ public class ModelWithInlineSpec: APIModel {
     /** an inline model */
     public var myModel: MyModel?
 
+    /** an inline model */
     public class MyModel: APIModel {
 
         /** name of the model */
@@ -19,20 +20,16 @@ public class ModelWithInlineSpec: APIModel {
             self.name = name
         }
 
-        private enum CodingKeys: String, CodingKey {
-            case name
-        }
-
         public required init(from decoder: Decoder) throws {
-            let container = try decoder.container(keyedBy: CodingKeys.self)
+            let container = try decoder.container(keyedBy: StringCodingKey.self)
 
-            name = try container.decodeIfPresent(.name)
+            name = try container.decodeIfPresent("name")
         }
 
         public func encode(to encoder: Encoder) throws {
-            var container = encoder.container(keyedBy: CodingKeys.self)
+            var container = encoder.container(keyedBy: StringCodingKey.self)
 
-            try container.encodeIfPresent(name, forKey: .name)
+            try container.encodeIfPresent(name, forKey: "name")
         }
 
         public func isEqual(to object: Any?) -> Bool {
@@ -50,20 +47,16 @@ public class ModelWithInlineSpec: APIModel {
         self.myModel = myModel
     }
 
-    private enum CodingKeys: String, CodingKey {
-        case myModel
-    }
-
     public required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: StringCodingKey.self)
 
-        myModel = try container.decodeIfPresent(.myModel)
+        myModel = try container.decodeIfPresent("myModel")
     }
 
     public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: StringCodingKey.self)
 
-        try container.encodeIfPresent(myModel, forKey: .myModel)
+        try container.encodeIfPresent(myModel, forKey: "myModel")
     }
 
     public func isEqual(to object: Any?) -> Bool {

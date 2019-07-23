@@ -7,9 +7,7 @@ import Foundation
 
 extension TFL.Line {
 
-    /**
-    Gets the line status of for given line ids e.g Minor Delays
-    */
+    /** Gets the line status of for given line ids e.g Minor Delays */
     public enum LineStatusByIds {
 
         public static let service = APIService<Response>(id: "Line_StatusByIds", tag: "Line", method: "GET", path: "/Line/{ids}/Status", hasBody: false)
@@ -47,7 +45,7 @@ extension TFL.Line {
                 return super.path.replacingOccurrences(of: "{" + "ids" + "}", with: "\(self.options.ids.joined(separator: ","))")
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 if let detail = options.detail {
                   params["detail"] = detail

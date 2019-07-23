@@ -7,9 +7,7 @@ import Foundation
 
 extension TBX.Auth {
 
-    /**
-    Return Url from SAML login
-    */
+    /** Return Url from SAML login */
     public enum AuthSamlAssertGetAuthSamlAssert {
 
         public static let service = APIService<Response>(id: "auth.samlAssert__get_auth_saml_assert", tag: "auth", method: "GET", path: "/auth/saml/assert", hasBody: false)
@@ -41,7 +39,7 @@ extension TBX.Auth {
                 self.init(options: options)
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 if let sAMLResponse = options.sAMLResponse {
                   params["SAMLResponse"] = sAMLResponse

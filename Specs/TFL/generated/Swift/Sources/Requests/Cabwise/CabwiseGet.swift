@@ -7,9 +7,7 @@ import Foundation
 
 extension TFL.Cabwise {
 
-    /**
-    Gets taxis and minicabs contact information
-    */
+    /** Gets taxis and minicabs contact information */
     public enum CabwiseGet {
 
         public static let service = APIService<Response>(id: "Cabwise_Get", tag: "Cabwise", method: "GET", path: "/Cabwise/search", hasBody: false)
@@ -75,7 +73,7 @@ extension TFL.Cabwise {
                 self.init(options: options)
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 params["lat"] = options.lat
                 params["lon"] = options.lon

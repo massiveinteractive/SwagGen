@@ -4,33 +4,38 @@ import Foundation
 
 extension {{ options.name }}{% if tag %}.{{ options.tagPrefix }}{{ tag|upperCamelCase }}{{ options.tagSuffix }}{% endif %} {
 
-    {% if description or summary %}
+    {% if description and summary %}
+    {% if description == summary %}
+    /** {{ description }} */
+    {% else %}
     /**
-    {% if summary %}
     {{ summary }}
-    {% if description and description != summary %}
 
     {{ description }}
-    {% endif %}
-    {% elif description %}
-    {{ description }}
-    {% endif %}
     */
+    {% endif %}
+    {% else %}
+    {% if description %}
+    /** {{ description }} */
+    {% endif %}
+    {% if summary %}
+    /** {{ summary }} */
+    {% endif %}
     {% endif %}
     public enum {{ type }} {
 
-        public static let service = APIService<Response>(id: "{{ operationId }}", tag: "{{ tag }}", method: "{{ method|uppercase }}", path: "{{ path }}", hasBody: {% if hasBody %}true{% else %}false{% endif %}{% if hasFileParam %}, hasFile: true{% endif %}{% if securityRequirement %}, securityRequirement: SecurityRequirement(type: "{{ securityRequirement.name }}", scope: "{{ securityRequirement.scope }}"){% endif %})
+        public static let service = APIService<Response>(id: "{{ operationId }}", tag: "{{ tag }}", method: "{{ method|uppercase }}", path: "{{ path }}", hasBody: {% if hasBody %}true{% else %}false{% endif %}{% if isUpload %}, isUpload: true{% endif %}{% if securityRequirement %}, securityRequirement: SecurityRequirement(type: "{{ securityRequirement.name }}", scopes: [{% for scope in securityRequirement.scopes %}"{{ scope }}"{% ifnot forloop.last %}, {% endif %}{% endfor %}]){% endif %})
         {% for enum in requestEnums %}
         {% if not enum.isGlobal %}
 
-        {% include "Includes/Enum.stencil" using enum %}
+        {% filter indent:8 %}{% include "Includes/Enum.stencil" enum %}{% endfilter %}
         {% endif %}
         {% endfor %}
 
         public final class Request: APIRequest<Response> {
             {% for schema in requestSchemas %}
 
-            {% include "Includes/Model.stencil" using schema %}
+            {% filter indent:12 %}{% include "Includes/Model.stencil" schema %}{% endfilter %}
             {% endfor %}
             {% if nonBodyParams %}
 
@@ -52,44 +57,44 @@ extension {{ options.name }}{% if tag %}.{{ options.tagPrefix }}{{ tag|upperCame
 
             public var options: Options
             {% endif %}
-            {% if bodyParam %}
+            {% if body %}
 
-            public var {{ bodyParam.name}}: {{bodyParam.optionalType}}
+            public var {{ body.name}}: {{body.optionalType}}
             {% endif %}
 
-            public init({% if bodyParam %}{{ bodyParam.name}}: {{ bodyParam.optionalType }}{% if nonBodyParams %}, {% endif %}{% endif %}{% if nonBodyParams %}options: Options{% endif %}) {
-                {% if bodyParam %}
-                self.{{ bodyParam.name}} = {{ bodyParam.name}}
+            public init({% if body %}{{ body.name}}: {{ body.optionalType }}{% if nonBodyParams %}, {% endif %}{% endif %}{% if nonBodyParams %}options: Options{% endif %}) {
+                {% if body %}
+                self.{{ body.name}} = {{ body.name}}
                 {% endif %}
                 {% if nonBodyParams %}
                 self.options = options
                 {% endif %}
-                super.init(service: {{ type }}.service){% if bodyParam %} {
+                super.init(service: {{ type }}.service){% if body %} {
                     let jsonEncoder = JSONEncoder()
-                    return try jsonEncoder.encode({% if bodyParam.isAnyType %}AnyCodable({{ bodyParam.name }}).value{% else %}{{ bodyParam.name }}{% endif %})
+                    return try jsonEncoder.encode({% if body.isAnyType %}AnyCodable({{ body.name }}).value{% else %}{{ body.name }}{% endif %})
                 }{% endif %}
             }
             {% if nonBodyParams %}
 
             /// convenience initialiser so an Option doesn't have to be created
-            public convenience init({% for param in params %}{{ param.name }}: {{ param.optionalType }}{% ifnot param.required %} = nil{% endif %}{% ifnot forloop.last %}, {% endif %}{% endfor %}) {
+            public convenience init({% for param in nonBodyParams %}{{ param.name }}: {{ param.optionalType }}{% ifnot param.required %} = nil{% endif %}{% ifnot forloop.last %}, {% endif %}{% endfor %}{% if nonBodyParams and body %}, {% endif %}{% if body %}{{ body.name}}: {{ body.optionalType}}{% ifnot body.required %} = nil{% endif %}{% endif %}) {
                 {% if nonBodyParams %}
                 let options = Options({% for param in nonBodyParams %}{{param.name}}: {{param.name}}{% ifnot forloop.last %}, {% endif %}{% endfor %})
                 {% endif %}
-                self.init({% if bodyParam %}{{ bodyParam.name}}: {{ bodyParam.name}}{% if nonBodyParams %}, {% endif %}{% endif %}{% if nonBodyParams %}options: options{% endif %})
+                self.init({% if body %}{{ body.name}}: {{ body.name}}{% if nonBodyParams %}, {% endif %}{% endif %}{% if nonBodyParams %}options: options{% endif %})
             }
             {% endif %}
             {% if pathParams %}
 
             public override var path: String {
-                return super.path{% for param in pathParams %}.replacingOccurrences(of: "{" + "{{ param.name }}" + "}", with: "\(self.options.{{ param.encodedValue }})"){% endfor %}
+                return super.path{% for param in pathParams %}.replacingOccurrences(of: "{" + "{{ param.value }}" + "}", with: "\(self.options.{{ param.encodedValue }})"){% endfor %}
             }
             {% endif %}
-            {% if encodedParams %}
+            {% if queryParams %}
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
-                {% for param in encodedParams %}
+                {% for param in queryParams %}
                 {% if param.optional %}
                 if let {{ param.name }} = options.{{ param.encodedValue }} {
                   params["{{ param.value }}"] = {{ param.name }}
@@ -101,17 +106,49 @@ extension {{ options.name }}{% if tag %}.{{ options.tagPrefix }}{{ tag|upperCame
                 return params
             }
             {% endif %}
+            {% if formProperties %}
+
+            public override var formParameters: [String: Any] {
+                var params: [String: Any] = [:]
+                {% for param in formProperties %}
+                {% if param.optional %}
+                if let {{ param.name }} = options.{{ param.encodedValue }} {
+                  params["{{ param.value }}"] = {{ param.name }}
+                }
+                {% else %}
+                params["{{ param.value }}"] = options.{{ param.encodedValue }}
+                {% endif %}
+                {% endfor %}
+                return params
+            }
+            {% endif %}
+            {% if headerParams %}
+
+            override var headerParameters: [String: String] {
+                var headers: [String: String] = [:]
+                {% for param in headerParams %}
+                {% if param.optional %}
+                if let {{ param.name }} = options.{{ param.encodedValue }} {
+                  headers["{{ param.value }}"] = {% if param.type == "String" %}{{ param.name }}{% else %}String(describing: {{ param.name }}){% endif %}
+                }
+                {% else %}
+                headers["{{ param.value }}"] = {% if param.type == "String" %}options.{{ param.encodedValue }}{% else %}String(describing: options.{{ param.encodedValue }}){% endif %}
+                {% endif %}
+                {% endfor %}
+                return headers
+            }
+            {% endif %}
         }
 
         public enum Response: APIResponseValue, CustomStringConvertible, CustomDebugStringConvertible {
             {% for schema in responseSchemas %}
 
-            {% include "Includes/Model.stencil" using schema %}
+            {% filter indent:12 %}{% include "Includes/Model.stencil" schema %}{% endfilter %}
             {% endfor %}
             {% for enum in responseEnums %}
             {% if not enum.isGlobal %}
 
-            {% include "Includes/Enum.stencil" using enum %}
+            {% filter indent:12 %}{% include "Includes/Enum.stencil" enum %}{% endfilter %}
             {% endif %}
             {% endfor %}
             public typealias SuccessType = {{ successType|default:"Void"}}
@@ -136,7 +173,7 @@ extension {{ options.name }}{% if tag %}.{{ options.tagPrefix }}{{ tag|upperCame
                 case .{{ response.name }}: return ()
                 {% endif %}
                 {% endfor %}
-                {% if not onlySuccessReponses %}
+                {% if not onlySuccessResponses %}
                 default: return nil
                 {% endif %}
                 }

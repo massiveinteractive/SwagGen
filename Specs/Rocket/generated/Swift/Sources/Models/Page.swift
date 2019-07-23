@@ -14,20 +14,16 @@ public class Page: PageSummary {
     public var customFields: [String: Any]?
 
     /** When the page represents the detail of an item this property will contain the item detail.
-
 For clients consuming an item detail page, any page row entry of type `ItemDetailEntry`
 should look to obtain its data from the contents of this property.
-
 *Note that you have to be using feature flag `idp` to enable this
 on item detail pages. See `feature-flags.md` for further details.*
  */
     public var item: ItemDetail?
 
     /** When the page represents the detail of a List this property will contain the list in question.
-
 For clients consuming a list detail page, any page row entry of type `ListDetailEntry`
 should look to obtain its data from the contents of this property.
-
 *Note that you have to be using feature flag `ldp` to enable this
 on list detail pages. See `feature-flags.md` for further details.*
  */
@@ -44,33 +40,25 @@ on list detail pages. See `feature-flags.md` for further details.*
         super.init(id: id, path: path, title: title, template: template, isStatic: isStatic, isSystemPage: isSystemPage, key: key)
     }
 
-    private enum CodingKeys: String, CodingKey {
-        case entries
-        case customFields
-        case item
-        case list
-        case metadata
-    }
-
     public required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: StringCodingKey.self)
 
-        entries = try container.decodeArray(.entries)
-        customFields = try container.decodeAnyIfPresent(.customFields)
-        item = try container.decodeIfPresent(.item)
-        list = try container.decodeIfPresent(.list)
-        metadata = try container.decodeIfPresent(.metadata)
+        entries = try container.decodeArray("entries")
+        customFields = try container.decodeAnyIfPresent("customFields")
+        item = try container.decodeIfPresent("item")
+        list = try container.decodeIfPresent("list")
+        metadata = try container.decodeIfPresent("metadata")
         try super.init(from: decoder)
     }
 
     public override func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: StringCodingKey.self)
 
-        try container.encode(entries, forKey: .entries)
-        try container.encodeAnyIfPresent(customFields, forKey: .customFields)
-        try container.encodeIfPresent(item, forKey: .item)
-        try container.encodeIfPresent(list, forKey: .list)
-        try container.encodeIfPresent(metadata, forKey: .metadata)
+        try container.encode(entries, forKey: "entries")
+        try container.encodeAnyIfPresent(customFields, forKey: "customFields")
+        try container.encodeIfPresent(item, forKey: "item")
+        try container.encodeIfPresent(list, forKey: "list")
+        try container.encodeIfPresent(metadata, forKey: "metadata")
         try super.encode(to: encoder)
     }
 

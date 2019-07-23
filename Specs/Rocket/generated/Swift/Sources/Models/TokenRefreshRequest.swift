@@ -11,19 +11,13 @@ public class TokenRefreshRequest: APIModel {
     along with the token(s). This is only really intended for web based clients which
     need to pass the cookies to a server to render a page based on the users
     content filters, e.g subscription code.
-
     If type `Session` the cookie will be session based.
     If type `Persistent` the cookie will have a medium term lifespan.
     If undefined no cookies will be set.
      */
-    public enum CookieType: String, Codable {
+    public enum CookieType: String, Codable, Equatable, CaseIterable {
         case session = "Session"
         case persistent = "Persistent"
-
-        public static let cases: [CookieType] = [
-          .session,
-          .persistent,
-        ]
     }
 
     /** The token to refresh. */
@@ -33,7 +27,6 @@ public class TokenRefreshRequest: APIModel {
 along with the token(s). This is only really intended for web based clients which
 need to pass the cookies to a server to render a page based on the users
 content filters, e.g subscription code.
-
 If type `Session` the cookie will be session based.
 If type `Persistent` the cookie will have a medium term lifespan.
 If undefined no cookies will be set.
@@ -45,23 +38,18 @@ If undefined no cookies will be set.
         self.cookieType = cookieType
     }
 
-    private enum CodingKeys: String, CodingKey {
-        case token
-        case cookieType
-    }
-
     public required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let container = try decoder.container(keyedBy: StringCodingKey.self)
 
-        token = try container.decode(.token)
-        cookieType = try container.decodeIfPresent(.cookieType)
+        token = try container.decode("token")
+        cookieType = try container.decodeIfPresent("cookieType")
     }
 
     public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: StringCodingKey.self)
 
-        try container.encode(token, forKey: .token)
-        try container.encodeIfPresent(cookieType, forKey: .cookieType)
+        try container.encode(token, forKey: "token")
+        try container.encodeIfPresent(cookieType, forKey: "cookieType")
     }
 
     public func isEqual(to object: Any?) -> Bool {

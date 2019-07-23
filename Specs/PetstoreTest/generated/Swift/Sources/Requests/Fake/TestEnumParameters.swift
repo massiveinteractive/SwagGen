@@ -7,116 +7,65 @@ import Foundation
 
 extension PetstoreTest.Fake {
 
-    /**
-    To test enum parameters
-    */
+    /** To test enum parameters */
     public enum TestEnumParameters {
 
         public static let service = APIService<Response>(id: "testEnumParameters", tag: "fake", method: "GET", path: "/fake", hasBody: true)
 
-        /** Form parameter enum test (string array) */
-        public enum EnumFormStringArray: String, Codable {
-            case greaterThan = ">"
-            case dollar = "$"
-
-            public static let cases: [EnumFormStringArray] = [
-              .greaterThan,
-              .dollar,
-            ]
-        }
-
-        /** Form parameter enum test (string) */
-        public enum EnumFormString: String, Codable {
-            case abc = "_abc"
-            case efg = "-efg"
-            case xyz = "(xyz)"
-
-            public static let cases: [EnumFormString] = [
-              .abc,
-              .efg,
-              .xyz,
-            ]
-        }
-
         /** Header parameter enum test (string array) */
-        public enum EnumHeaderStringArray: String, Codable {
+        public enum EnumHeaderStringArray: String, Codable, Equatable, CaseIterable {
             case greaterThan = ">"
             case dollar = "$"
-
-            public static let cases: [EnumHeaderStringArray] = [
-              .greaterThan,
-              .dollar,
-            ]
         }
 
         /** Header parameter enum test (string) */
-        public enum EnumHeaderString: String, Codable {
+        public enum EnumHeaderString: String, Codable, Equatable, CaseIterable {
             case abc = "_abc"
             case efg = "-efg"
             case xyz = "(xyz)"
-
-            public static let cases: [EnumHeaderString] = [
-              .abc,
-              .efg,
-              .xyz,
-            ]
         }
 
         /** Query parameter enum test (string array) */
-        public enum EnumQueryStringArray: String, Codable {
+        public enum EnumQueryStringArray: String, Codable, Equatable, CaseIterable {
             case greaterThan = ">"
             case dollar = "$"
-
-            public static let cases: [EnumQueryStringArray] = [
-              .greaterThan,
-              .dollar,
-            ]
         }
 
         /** Query parameter enum test (string) */
-        public enum EnumQueryString: String, Codable {
+        public enum EnumQueryString: String, Codable, Equatable, CaseIterable {
             case abc = "_abc"
             case efg = "-efg"
             case xyz = "(xyz)"
-
-            public static let cases: [EnumQueryString] = [
-              .abc,
-              .efg,
-              .xyz,
-            ]
         }
 
         /** Query parameter enum test (double) */
-        public enum EnumQueryInteger: Int, Codable {
+        public enum EnumQueryInteger: Int, Codable, Equatable, CaseIterable {
             case _1 = 1
             case negative2 = -2
+        }
 
-            public static let cases: [EnumQueryInteger] = [
-              ._1,
-              .negative2,
-            ]
+        /** Form parameter enum test (string) */
+        public enum EnumFormString: String, Codable, Equatable, CaseIterable {
+            case abc = "_abc"
+            case efg = "-efg"
+            case xyz = "(xyz)"
+        }
+
+        /** Form parameter enum test (string array) */
+        public enum EnumFormStringArray: String, Codable, Equatable, CaseIterable {
+            case greaterThan = ">"
+            case dollar = "$"
         }
 
         /** Query parameter enum test (double) */
-        public enum EnumQueryDouble: Double, Codable {
+        public enum EnumQueryDouble: Double, Codable, Equatable, CaseIterable {
             case _11 = 1.1
             case negative12 = -1.2
-
-            public static let cases: [EnumQueryDouble] = [
-              ._11,
-              .negative12,
-            ]
         }
 
         public final class Request: APIRequest<Response> {
 
             public struct Options {
-
-                /** Form parameter enum test (string array) */
-                public var enumFormStringArray: [EnumFormStringArray]?
-
-                /** Form parameter enum test (string) */
-                public var enumFormString: EnumFormString?
 
                 /** Header parameter enum test (string array) */
                 public var enumHeaderStringArray: [EnumHeaderStringArray]?
@@ -133,17 +82,23 @@ extension PetstoreTest.Fake {
                 /** Query parameter enum test (double) */
                 public var enumQueryInteger: EnumQueryInteger?
 
+                /** Form parameter enum test (string) */
+                public var enumFormString: EnumFormString?
+
+                /** Form parameter enum test (string array) */
+                public var enumFormStringArray: [EnumFormStringArray]?
+
                 /** Query parameter enum test (double) */
                 public var enumQueryDouble: EnumQueryDouble?
 
-                public init(enumFormStringArray: [EnumFormStringArray]? = nil, enumFormString: EnumFormString? = nil, enumHeaderStringArray: [EnumHeaderStringArray]? = nil, enumHeaderString: EnumHeaderString? = nil, enumQueryStringArray: [EnumQueryStringArray]? = nil, enumQueryString: EnumQueryString? = nil, enumQueryInteger: EnumQueryInteger? = nil, enumQueryDouble: EnumQueryDouble? = nil) {
-                    self.enumFormStringArray = enumFormStringArray
-                    self.enumFormString = enumFormString
+                public init(enumHeaderStringArray: [EnumHeaderStringArray]? = nil, enumHeaderString: EnumHeaderString? = nil, enumQueryStringArray: [EnumQueryStringArray]? = nil, enumQueryString: EnumQueryString? = nil, enumQueryInteger: EnumQueryInteger? = nil, enumFormString: EnumFormString? = nil, enumFormStringArray: [EnumFormStringArray]? = nil, enumQueryDouble: EnumQueryDouble? = nil) {
                     self.enumHeaderStringArray = enumHeaderStringArray
                     self.enumHeaderString = enumHeaderString
                     self.enumQueryStringArray = enumQueryStringArray
                     self.enumQueryString = enumQueryString
                     self.enumQueryInteger = enumQueryInteger
+                    self.enumFormString = enumFormString
+                    self.enumFormStringArray = enumFormStringArray
                     self.enumQueryDouble = enumQueryDouble
                 }
             }
@@ -156,19 +111,13 @@ extension PetstoreTest.Fake {
             }
 
             /// convenience initialiser so an Option doesn't have to be created
-            public convenience init(enumFormStringArray: [EnumFormStringArray]? = nil, enumFormString: EnumFormString? = nil, enumHeaderStringArray: [EnumHeaderStringArray]? = nil, enumHeaderString: EnumHeaderString? = nil, enumQueryStringArray: [EnumQueryStringArray]? = nil, enumQueryString: EnumQueryString? = nil, enumQueryInteger: EnumQueryInteger? = nil, enumQueryDouble: EnumQueryDouble? = nil) {
-                let options = Options(enumFormStringArray: enumFormStringArray, enumFormString: enumFormString, enumHeaderStringArray: enumHeaderStringArray, enumHeaderString: enumHeaderString, enumQueryStringArray: enumQueryStringArray, enumQueryString: enumQueryString, enumQueryInteger: enumQueryInteger, enumQueryDouble: enumQueryDouble)
+            public convenience init(enumHeaderStringArray: [EnumHeaderStringArray]? = nil, enumHeaderString: EnumHeaderString? = nil, enumQueryStringArray: [EnumQueryStringArray]? = nil, enumQueryString: EnumQueryString? = nil, enumQueryInteger: EnumQueryInteger? = nil, enumFormString: EnumFormString? = nil, enumFormStringArray: [EnumFormStringArray]? = nil, enumQueryDouble: EnumQueryDouble? = nil) {
+                let options = Options(enumHeaderStringArray: enumHeaderStringArray, enumHeaderString: enumHeaderString, enumQueryStringArray: enumQueryStringArray, enumQueryString: enumQueryString, enumQueryInteger: enumQueryInteger, enumFormString: enumFormString, enumFormStringArray: enumFormStringArray, enumQueryDouble: enumQueryDouble)
                 self.init(options: options)
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
-                if let enumFormStringArray = options.enumFormStringArray?.encode().map({ String(describing: $0) }).joined(separator: ",") {
-                  params["enum_form_string_array"] = enumFormStringArray
-                }
-                if let enumFormString = options.enumFormString?.encode() {
-                  params["enum_form_string"] = enumFormString
-                }
                 if let enumQueryStringArray = options.enumQueryStringArray?.encode().map({ String(describing: $0) }).joined(separator: ",") {
                   params["enum_query_string_array"] = enumQueryStringArray
                 }
@@ -178,10 +127,32 @@ extension PetstoreTest.Fake {
                 if let enumQueryInteger = options.enumQueryInteger?.encode() {
                   params["enum_query_integer"] = enumQueryInteger
                 }
+                return params
+            }
+
+            public override var formParameters: [String: Any] {
+                var params: [String: Any] = [:]
+                if let enumFormString = options.enumFormString?.encode() {
+                  params["enum_form_string"] = enumFormString
+                }
+                if let enumFormStringArray = options.enumFormStringArray?.encode() {
+                  params["enum_form_string_array"] = enumFormStringArray
+                }
                 if let enumQueryDouble = options.enumQueryDouble?.encode() {
                   params["enum_query_double"] = enumQueryDouble
                 }
                 return params
+            }
+
+            override var headerParameters: [String: String] {
+                var headers: [String: String] = [:]
+                if let enumHeaderStringArray = options.enumHeaderStringArray?.encode().map({ String(describing: $0) }).joined(separator: ",") {
+                  headers["enum_header_string_array"] = String(describing: enumHeaderStringArray)
+                }
+                if let enumHeaderString = options.enumHeaderString?.encode() {
+                  headers["enum_header_string"] = String(describing: enumHeaderString)
+                }
+                return headers
             }
         }
 

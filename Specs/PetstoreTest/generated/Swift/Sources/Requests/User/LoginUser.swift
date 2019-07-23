@@ -7,9 +7,7 @@ import Foundation
 
 extension PetstoreTest.User {
 
-    /**
-    Logs user into the system
-    */
+    /** Logs user into the system */
     public enum LoginUser {
 
         public static let service = APIService<Response>(id: "loginUser", tag: "user", method: "GET", path: "/user/login", hasBody: false)
@@ -43,7 +41,7 @@ extension PetstoreTest.User {
                 self.init(options: options)
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 params["username"] = options.username
                 params["password"] = options.password

@@ -7,12 +7,10 @@ import Foundation
 
 extension Rocket.Profile {
 
-    /**
-    Returns the list of bookmarked items under the active profile.
-    */
+    /** Returns the list of bookmarked items under the active profile. */
     public enum GetBookmarkList {
 
-        public static let service = APIService<Response>(id: "getBookmarkList", tag: "profile", method: "GET", path: "/account/profile/bookmarks/list", hasBody: false, securityRequirement: SecurityRequirement(type: "profileAuth", scope: "Catalog"))
+        public static let service = APIService<Response>(id: "getBookmarkList", tag: "profile", method: "GET", path: "/account/profile/bookmarks/list", hasBody: false, securityRequirement: SecurityRequirement(type: "profileAuth", scopes: ["Catalog"]))
 
         public final class Request: APIRequest<Response> {
 
@@ -40,19 +38,14 @@ extension Rocket.Profile {
                 public var segments: [String]?
 
                 /** The set of opt in feature flags which cause breaking changes to responses.
-
 While Rocket APIs look to avoid breaking changes under the active major version, the formats of responses
 may need to evolve over this time.
-
 These feature flags allow clients to select which response formats they expect and avoid breaking
 clients as these formats evolve under the current major version.
-
 ### Flags
-
 - `all` - Enable all flags. Useful for testing. _Don't use in production_.
 - `idp` - Dynamic item detail pages with schedulable rows.
 - `ldp` - Dynamic list detail pages with schedulable rows.
-
 See the `feature-flags.md` for available flag details.
  */
                 public var ff: [FeatureFlags]?
@@ -82,7 +75,7 @@ See the `feature-flags.md` for available flag details.
                 self.init(options: options)
             }
 
-            public override var parameters: [String: Any] {
+            public override var queryParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 if let page = options.page {
                   params["page"] = page

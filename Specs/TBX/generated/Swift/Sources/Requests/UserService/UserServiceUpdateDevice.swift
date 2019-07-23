@@ -7,9 +7,7 @@ import Foundation
 
 extension TBX.UserService {
 
-    /**
-    Update Device info
-    */
+    /** Update Device info */
     public enum UserServiceUpdateDevice {
 
         public static let service = APIService<Response>(id: "UserService.updateDevice", tag: "UserService", method: "PUT", path: "/UserServices/device/{device}", hasBody: true)
@@ -47,7 +45,7 @@ extension TBX.UserService {
                 return super.path.replacingOccurrences(of: "{" + "device" + "}", with: "\(self.options.device)")
             }
 
-            public override var parameters: [String: Any] {
+            public override var formParameters: [String: Any] {
                 var params: [String: Any] = [:]
                 params["description"] = options.description
                 return params

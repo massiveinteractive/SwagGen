@@ -7,24 +7,22 @@ import Foundation
 
 extension TestSpec {
 
-    /**
-    operation without a tag
-    */
-    public enum GetUntagged {
+    /** operation with a tag */
+    public enum Pets {
 
-        public static let service = APIService<Response>(id: "getUntagged", tag: "", method: "GET", path: "/untagged", hasBody: false, securityRequirement: SecurityRequirement(type: "test_auth", scope: "read"))
+        public static let service = APIService<Response>(id: "Pets", tag: "", method: "GET", path: "/tagged", hasBody: false, securityRequirement: SecurityRequirement(type: "test_auth", scopes: ["read"]))
 
         public final class Request: APIRequest<Response> {
 
             public init() {
-                super.init(service: GetUntagged.service)
+                super.init(service: Pets.service)
             }
         }
 
         public enum Response: APIResponseValue, CustomStringConvertible, CustomDebugStringConvertible {
             public typealias SuccessType = Void
 
-            /** Empty response */
+            /** Success */
             case status201
 
             public var success: Void? {
