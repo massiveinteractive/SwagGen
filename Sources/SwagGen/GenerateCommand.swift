@@ -46,7 +46,7 @@ class GenerateCommand: Command {
         }
 
         var options: [String: Any] = [:]
-        for option in self.options.values {
+        for option in self.options.values.compactMap {
             guard option.contains(":") else {
                 exitWithError("Options arguement '\(option)' must be comma delimited and the name and value must be seperated by a colon")
             }
