@@ -46,11 +46,11 @@ class GenerateCommand: Command {
         }
 
         var options: [String: Any] = [:]
-        for option in self.options.values.compactMap {
+        for option in self.options.values {
             guard option.contains(":") else {
                 exitWithError("Options arguement '\(option)' must be comma delimited and the name and value must be seperated by a colon")
             }
-            let parts = option.components(separatedBy: ":").map { $0.trimmingCharacters(in: .whitespaces) }
+            let parts = option.components(separatedBy: ":").compactMap { $0.trimmingCharacters(in: .whitespaces) }
             if parts.count >= 2 {
                 let key = parts.first!
                 let value = Array(parts.dropFirst()).joined(separator: ":")
